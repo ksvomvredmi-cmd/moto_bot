@@ -2,6 +2,7 @@ import asyncio
 import http.server
 import os
 import threading
+import time
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import (
     KeyboardButton,
@@ -29,8 +30,8 @@ async def start_web_server():
 
 
 # --- Налаштування бота ---
-TOKEN = "8895105299:AAEYm9Qsb8K-gZrSPTBxwrUb56sTKkHp9cY"
-TARGET_CHAT_ID = -1004344737401  # ID вашей группы
+TOKEN = "8895105299:AAEyM9Qsb8K-gzrSPTBxwrUb56sTKkhP9cY"
+TARGET_CHAT_ID = -1004344737401
 ADMIN_ID = 1087968824
 
 bot = Bot(token=TOKEN)
@@ -41,7 +42,17 @@ user_cooldowns = {}
 COOLDOWN_TIME = 5
 
 main_keyboard = ReplyKeyboardMarkup(
-    keyboard=[[KeyboardButton(text="Почати 🏍")]], resize_keyboard=True
+    keyboard=[
+        [KeyboardButton(text="Почати 🏍")],
+        [KeyboardButton(text="📖 Правила спільноти")],
+    ],
+    resize_keyboard=True,
+)
+
+RULES_TEXT = (
+    "Спільнота створена в розважальних цілях, вона не несе за собою поганий"
+    " характер.\n\n"
+    "Будьте чемними та поважайте інших учасників!"
 )
 
 
@@ -60,26 +71,45 @@ async def cmd_start(message: Message):
 async def btn_start_action(message: Message):
   await message.answer(
       "🟢 Готово! Тепер просто надійшли мені текст, фото, відео чи кружок,"
+      " і я перешлю його анонімно у спільноту.",
+      reply_markup=main_keyboard,
   )
 
 
-# --- Обработчик для пересылки сообщений в группу ---
+@dp.message(F.text == "📖 Правила спільноти")
+async def btn_rules_action(message: Message):
+  await message.answer(RULES_TEXT, reply_markup=main_keyboard)
+
+
+# --- Захист від спаму та пересилання повідомлень ---
 @dp.message(F.chat.type == "private")
 async def forward_to_group(message: Message):
   if message.from_user.id == ADMIN_ID:
-    return  # Админа можно исключить или обрабатывать отдельно, если нужно
+    return
 
   if message.content_type not in ALLOWED_TYPES:
     return
 
+  current_time = time.time()
+  last_time = user_cooldowns.get(message.from_user.id, 0)
+
+  if current_time - last_time < COOLDOWN_TIME:
+    left_time = int(COOLDOWN_TIME - (current_time - last_time))
+    await message.answer(
+        f"⏳ Будь ласка, зачекайте ще {left_time} сек. перед надсиланням"
+        " наступного повідомлення."
+    )
+    return
+
+  user_cooldowns[message.from_user.id] = current_time
+
   try:
-    # Пересылаем сообщение в целевой чат (группу)
     await bot.copy_message(
         chat_id=TARGET_CHAT_ID,
         from_chat_id=message.chat.id,
         message_id=message.message_id,
     )
-    await message.answer("✅ Ваше повідомлення надіслано в спільноту!")
+    await message.answer("✅ Ваше повідомлення анонімно надіслано в спільноту!")
   except Exception as e:
     print(f"Помилка при пересиланні: {e}")
     await message.answer("❌ Сталася помилка при надсиланні повідомлення.")
