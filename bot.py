@@ -9,7 +9,7 @@ ADMIN_ID = 1087968824
 bot = Bot(token=TOKEN) 
 dp = Dispatcher()
 ALLOWED_TYPES = {'text', 'photo', 'video', 'video_note', 'voice', 'document'}
- {user_id: timestamp}
+{user_id: timestamp}
 user_cooldowns = {}
 COOLDOWN_TIME = 5  # Зменшено до 5 секунд для підтримки високої активності
 main_keyboard = ReplyKeyboardMarkup( keyboard=[ [KeyboardButton(text="Почати 🏍️")], [KeyboardButton(text="📝 Правила спільноти 📝")] ], resize_keyboard=True )
