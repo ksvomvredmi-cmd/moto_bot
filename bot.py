@@ -27,7 +27,7 @@ async def start_web_server():
 
 
 # --- Налаштування бота ---
-TOKEN = "8895105299:AAEyM9Qsb8K-gzrSPTBxwrUb56sTKkhP9cY"
+TOKEN = "8895105299:AAEYm9Qsb8K-gZrSPTBxwrUb56sTKkHp9cY"
 TARGET_CHAT_ID = -1004344737401
 ADMIN_ID = 1087968824
 
