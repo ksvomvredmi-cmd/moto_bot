@@ -6,7 +6,8 @@ from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, ReplyKey
 TOKEN = "8895105299:AAEYm9Qsb8K-gZrSPTBxwrUb56sTKkHp9cY"
 TARGET_CHAT_ID = -1004344737401
 ADMIN_ID = 1087968824
-bot = Bot(token=TOKEN) dp = Dispatcher()
+bot = Bot(token=TOKEN) 
+dp = Dispatcher()
 ALLOWED_TYPES = {'text', 'photo', 'video', 'video_note', 'voice', 'document'}
  {user_id: timestamp}
 user_cooldowns = {}
