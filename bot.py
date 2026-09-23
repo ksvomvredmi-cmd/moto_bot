@@ -34,32 +34,33 @@ async def stop_bot(message: Message):
         os._exit(0) 
     else: 
         await message.answer("⚠️ У вас немає прав на виконання цієї команди.")
-
 @dp.message(F.content_type.in_(ALLOWED_TYPES))
-async def forward_anonymous(message: Message): 
-    if message.text in ["Почати 🏍️", "📝 Правила спільноти 📝"]: return
+async def forward_anonymous(message: Message):
+    if message.text in ["Почати 🏍️", "📜 Правила спільноти 📜"]:
+        return
+    
     user_id = message.from_user.id
     current_time = time.time()
-
-# Адміністратора звільняємо від обмежень антиспаму, щоб він міг постити миттєво
-if user_id != ADMIN_ID:
-    last_time = user_cooldowns.get(user_id, 0)
-    time_diff = current_time - last_time
-
-    if time_diff < COOLDOWN_TIME:
-        wait_sec = int(COOLDOWN_TIME - time_diff) + 1
-        await message.answer(f"⏳ Зачекай ще {wait_sec} сек. перед відправкою наступного повідомлення (захист від спаму).")
-        return
-
+    
+    # Адміністратора звільняємо від обмежень антиспаму, щоб він міг постити миттєво
+    if user_id != ADMIN_ID:
+        last_time = user_cooldowns.get(user_id, 0)
+        time_diff = current_time - last_time
+        
+        if time_diff < COOLDOWN_TIME:
+            wait_sec = int(COOLDOWN_TIME - time_diff) + 1
+            await message.answer(f"⏳ Зачекай ще {wait_sec} сек. перед відправкою наступного повідомлення (захист від спаму).")
+            return
+            
     # Оновлюємо час останнього повідомлення для цього користувача
     user_cooldowns[user_id] = current_time
-
-try:
-    # Копіюємо контент у канал анонімно
-    await message.copy_to(chat_id=TARGET_CHAT_ID)
-    await message.answer("✅ Ваше повідомлення анонімно опубліковано в групі! 🏍️")
-except Exception:
-    await message.answer("⚠️ Сталася помилка при відправці.")
+    
+    try:
+        # Копіюємо контент у канал анонімно
+        await message.copy_to(chat_id=TARGET_CHAT_ID)
+        await message.answer("✅ Ваше повідомлення анонімно опубліковано в групі! 🏍️")
+    except Exception:
+        await message.answer("⚠️ Сталася помилка при відправці.")
 
 @dp.message(F.content_type.in_({'location', 'sticker', 'contact'})) 
 async def block_unwanted(message: Message): 
