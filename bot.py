@@ -41,6 +41,6 @@ try:
     await message.answer("✅ Ваше повідомлення анонімно опубліковано в групі! 🏍️")
 except Exception:
     await message.answer("⚠️ Сталася помилка при відправці.")
-Блокування забороненого контенту
+
 @dp.message(F.content_type.in_({'location', 'sticker', 'contact'})) async def block_unwanted(message: Message): await message.answer("⚠️ Геолокації, стікери та контакти заборонені заради анонімності та безпеки.")
 if name == "main": asyncio.run(dp.start_polling(bot))
