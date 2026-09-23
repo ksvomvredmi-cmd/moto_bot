@@ -63,5 +63,5 @@ except Exception:
 @dp.message(F.content_type.in_({'location', 'sticker', 'contact'})) 
 async def block_unwanted(message: Message): 
     await message.answer("⚠️ Геолокації, стікери та контакти заборонені заради анонімності та безпеки.")
-        if name == "main": 
+if name == "main": 
                 asyncio.run(dp.start_polling(bot))
