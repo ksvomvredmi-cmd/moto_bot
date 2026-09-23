@@ -18,13 +18,20 @@ RULES_TEXT = ( "Спільнота створена в розважальних 
 async def cmd_start(message: Message): welcome_text = ( f"Привіт, <b>{message.from_user.first_name}</b>! Вітаю у бота спільноти <b>МотоНя</b> 🏍️\n\n" "Обери потрібну кнопку нижче:" ) 
 await message.answer(welcome_text, reply_markup=main_keyboard, parse_mode="HTML")
 
-@dp.message(F.text == "Почати 🏍️") async def btn_start_action(message: Message): await message.answer( "✊ Готово! Тепер просто надішли мені текст, фото, відео чи кружок, і я анонімно опублікую його в каналі.", reply_markup=main_keyboard )
+@dp.message(F.text == "Почати 🏍️") 
+async def btn_start_action(message: Message): 
+await message.answer( "✊ Готово! Тепер просто надішли мені текст, фото, відео чи кружок, і я анонімно опублікую його в каналі.", reply_markup=main_keyboard )
 
-@dp.message(F.text == "📝 Правила спільноти 📝") async def btn_rules_action(message: Message): await message.answer(RULES_TEXT, parse_mode="HTML", reply_markup=main_keyboard)
+@dp.message(F.text == "📝 Правила спільноти 📝") 
+async def btn_rules_action(message: Message): 
+await message.answer(RULES_TEXT, parse_mode="HTML", reply_markup=main_keyboard)
 
-@dp.message(F.text == "/stop_bot") async def stop_bot(message: Message): if message.from_user.id == ADMIN_ID: await message.answer("🛑 Бот вимикається за командою адміністратора...", reply_markup=ReplyKeyboardRemove()) os._exit(0) else: await message.answer("⚠️ У вас немає прав на виконання цієї команди.")
+@dp.message(F.text == "/stop_bot") 
+async def stop_bot(message: Message): if message.from_user.id == ADMIN_ID:
+await message.answer("🛑 Бот вимикається за командою адміністратора...", reply_markup=ReplyKeyboardRemove()) os._exit(0) else: await message.answer("⚠️ У вас немає прав на виконання цієї команди.")
 
-@dp.message(F.content_type.in_(ALLOWED_TYPES)) async def forward_anonymous(message: Message): # Ігноруємо натискання меню-кнопок if message.text in ["Почати 🏍️", "📝 Правила спільноти 📝"]: return
+@dp.message(F.content_type.in_(ALLOWED_TYPES))
+async def forward_anonymous(message: Message): # Ігноруємо натискання меню-кнопок if message.text in ["Почати 🏍️", "📝 Правила спільноти 📝"]: return
 
 user_id = message.from_user.id
 current_time = time.time()
@@ -49,5 +56,7 @@ try:
 except Exception:
     await message.answer("⚠️ Сталася помилка при відправці.")
 
-@dp.message(F.content_type.in_({'location', 'sticker', 'contact'})) async def block_unwanted(message: Message): await message.answer("⚠️ Геолокації, стікери та контакти заборонені заради анонімності та безпеки.")
+@dp.message(F.content_type.in_({'location', 'sticker', 'contact'})) 
+async def block_unwanted(message: Message): 
+await message.answer("⚠️ Геолокації, стікери та контакти заборонені заради анонімності та безпеки.")
 if name == "main": asyncio.run(dp.start_polling(bot))
