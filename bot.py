@@ -15,8 +15,9 @@ COOLDOWN_TIME = 5  # Зменшено до 5 секунд для підтрим�
 main_keyboard = ReplyKeyboardMarkup( keyboard=[ [KeyboardButton(text="Почати 🏍️")], [KeyboardButton(text="📝 Правила спільноти 📝")] ], resize_keyboard=True )
 RULES_TEXT = ( "Спільнота створена в розважальних цілях, вона не несе за собою поганий характер.\n\n" "          🚫 <b>ЗАБОРОНЯЄТЬСЯ</b> 🚫\n\n" "<b>1.</b> Кидати сливи, ЦП, 18+ контент.\n" "<b>2.</b> Заборонено пригнічувати людей.\n" "<b>3.</b> Заборона реклами (дозволена в разі допомоги).\n\n" "⚠️ <i>В разі порушення правил 3 рази вас заблокують!</i>" )
 @dp.message(F.text == "/start") 
-async def cmd_start(message: Message): welcome_text = ( f"Привіт, <b>{message.from_user.first_name}</b>! Вітаю у бота спільноти <b>МотоНя</b> 🏍️\n\n" "Обери потрібну кнопку нижче:" ) 
-await message.answer(welcome_text, reply_markup=main_keyboard, parse_mode="HTML")
+async def cmd_start(message: Message): 
+    welcome_text = ( f"Привіт, <b>{message.from_user.first_name}</b>! Вітаю у бота спільноти <b>МотоНя</b> 🏍️\n\n" "Обери потрібну кнопку нижче:" ) 
+    await message.answer(welcome_text, reply_markup=main_keyboard, parse_mode="HTML")
 
 @dp.message(F.text == "Почати 🏍️") 
 async def btn_start_action(message: Message): 
