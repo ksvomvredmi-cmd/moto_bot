@@ -27,7 +27,7 @@ async def btn_rules_action(message: Message):
     await message.answer(RULES_TEXT, parse_mode="HTML", reply_markup=main_keyboard)
 
 @dp.message(F.text == "/stop_bot") 
-async def stop_bot(message: Message): 
+async def stop_bot(message: Message):
 if message.from_user.id == ADMIN_ID:
     await message.answer("🛑 Бот вимикається за командою адміністратора...", reply_markup=ReplyKeyboardRemove()) 
     os._exit(0) 
