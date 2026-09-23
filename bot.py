@@ -31,10 +31,11 @@ async def stop_bot(message: Message): if message.from_user.id == ADMIN_ID:
     await message.answer("🛑 Бот вимикається за командою адміністратора...", reply_markup=ReplyKeyboardRemove()) os._exit(0) else: await message.answer("⚠️ У вас немає прав на виконання цієї команди.")
 
 @dp.message(F.content_type.in_(ALLOWED_TYPES))
+
 async def forward_anonymous(message: Message): # Ігноруємо натискання меню-кнопок if message.text in ["Почати 🏍️", "📝 Правила спільноти 📝"]: return
 
-user_id = message.from_user.id
-current_time = time.time()
+    user_id = message.from_user.id
+    current_time = time.time()
 
 # Адміністратора звільняємо від обмежень антиспаму, щоб він міг постити миттєво
 if user_id != ADMIN_ID:
