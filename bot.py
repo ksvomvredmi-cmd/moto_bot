@@ -1,39 +1,32 @@
 import asyncio
-import http.server
 import os
-import threading
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import (
     KeyboardButton,
     Message,
     ReplyKeyboardMarkup,
-    ReplyKeyboardRemove,
 )
+from aiohttp import web
 
-# --- Міні-сервер для утримання порту Railway ---
+# --- Налаштування веб-сервера для Railway ---
 PORT = int(os.environ.get("PORT", 8080))
 
 
-class SimpleHandler(http.server.BaseHTTPRequestHandler):
-
-  def do_GET(self):
-    self.send_response(200)
-    self.end_headers()
-    self.wfile.write(b"Bot is running!")
-
-  def log_message(self, format, *args):
-    pass
+async def handle(request):
+  return web.Response(text="Bot is running!")
 
 
-def run_http_server():
-  server = http.server.HTTPServer(("0.0.0.0", PORT), SimpleHandler)
-  server.serve_forever()
+async def start_web_server():
+  app = web.Application()
+  app.router.add_get("/", handle)
+  runner = web.AppRunner(app)
+  await runner.setup()
+  site = web.TCPSite(runner, "0.0.0.0", PORT)
+  await site.start()
+  print(f"Web server started on port {PORT}")
 
 
-# Запускаємо веб-сервер у фоновому потоці
-threading.Thread(target=run_http_server, daemon=True).start()
-
-# --- Налаштування твого бота ---
+# --- Налаштування бота ---
 TOKEN = "8895105299:AAEyM9Qsb8K-gzrSPTBxwrUb56sTKkhP9cY"
 TARGET_CHAT_ID = -1004344737401
 ADMIN_ID = 1087968824
@@ -73,5 +66,12 @@ async def btn_start_action(message: Message):
   )
 
 
+async def main():
+  # Запускаємо веб-сервер та поллінг бота паралельно
+  await start_web_server()
+  print("Bot started polling...")
+  await dp.start_polling(bot)
+
+
 if __name__ == "__main__":
-  asyncio.run(dp.start_polling(bot))
+  asyncio.run(main())
