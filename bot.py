@@ -48,7 +48,7 @@ if user_id != ADMIN_ID:
 
     if time_diff < COOLDOWN_TIME:
         wait_sec = int(COOLDOWN_TIME - time_diff) + 1
-        await message.answer(f"⏳ Зачекай ще {wait_sec} сек. перед відправкою наступного повідомлення (захист від спаму).")
+            await message.answer(f"⏳ Зачекай ще {wait_sec} сек. перед відправкою наступного повідомлення (захист від спаму).")
         return
 
     # Оновлюємо час останнього повідомлення для цього користувача
