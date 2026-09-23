@@ -64,5 +64,5 @@ async def forward_anonymous(message: Message):
 @dp.message(F.content_type.in_({'location', 'sticker', 'contact'})) 
 async def block_unwanted(message: Message): 
     await message.answer("⚠️ Геолокації, стікери та контакти заборонені заради анонімності та безпеки.")
-if name == "main": 
+if __name__ == "__main__": 
                 asyncio.run(dp.start_polling(bot))
