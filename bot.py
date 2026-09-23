@@ -29,9 +29,10 @@ async def btn_rules_action(message: Message):
 @dp.message(F.text == "/stop_bot") 
 async def stop_bot(message: Message):
     if message.from_user.id == ADMIN_ID:
-    await message.answer("🛑 Бот вимикається за командою адміністратора...", reply_markup=ReplyKeyboardRemove()) 
-    os._exit(0) 
-else: await message.answer("⚠️ У вас немає прав на виконання цієї команди.")
+        await message.answer("🛑 Бот вимикається за командою адміністратора...", reply_markup=ReplyKeyboardRemove()) 
+        os._exit(0) 
+    else: 
+        await message.answer("⚠️ У вас немає прав на виконання цієї команди.")
 
 @dp.message(F.content_type.in_(ALLOWED_TYPES))
 async def forward_anonymous(message: Message): 
@@ -62,4 +63,5 @@ except Exception:
 @dp.message(F.content_type.in_({'location', 'sticker', 'contact'})) 
 async def block_unwanted(message: Message): 
 await message.answer("⚠️ Геолокації, стікери та контакти заборонені заради анонімності та безпеки.")
-if name == "main": asyncio.run(dp.start_polling(bot))
+    if name == "main": 
+            asyncio.run(dp.start_polling(bot))
